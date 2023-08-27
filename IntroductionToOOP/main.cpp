@@ -129,6 +129,7 @@ std::ostream& operator<<(std::ostream& os, const Point obj)
 	return os;
 }
 
+
 //#define STRUCT_POINT;
 //#define CONSTRUCTORS_CHECK
 //#define ASSIGMENT_CHECK
