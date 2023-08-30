@@ -5,6 +5,8 @@ using std::endl;
 using std::cout;
 using std::cin;
 //описание структуры
+
+#define delimiter "\n---------------------------\n"
 class Point
 {
 	double x;
@@ -56,7 +58,7 @@ public:
 		cout << "Deep-copy:\t"<<this<<endl;
 	}
 	//Assigment operator:
-	Point operator=(const Point& other)
+	Point& operator=(const Point& other)
 	{
 		this->x = other.x;
 		this->y = other.y;
@@ -99,9 +101,14 @@ public:
 		cout << "X = " << this->x << "\t" << "Y = " << this->y << endl;
 	}
 
-	double distance()const //distance one Point
+	double distance(const Point& other)const //distance one Point
 	{
-		return sqrt(this->x * this->x + this->y * this->y);
+		//this - A
+		//other - B
+		double x_distance = this->x - other.x;
+		double y_distance = this->y - other.y;
+		double distance = sqrt(x_distance * x_distance + y_distance * y_distance);
+		return distance;
 	}
 };
 
@@ -129,10 +136,11 @@ std::ostream& operator<<(std::ostream& os, const Point obj)
 	return os;
 }
 
-
 //#define STRUCT_POINT;
 //#define CONSTRUCTORS_CHECK
-//#define ASSIGMENT_CHECK
+//#define DISTANCE_CHECK
+#define ASSIGMENT_CHECK
+//#define OPERATORS_CHECK
 
 void main()
 {
@@ -165,19 +173,32 @@ void main()
 	E = D;
 	E.print();
 #endif //CONSTRUCTORS_CHECK
+#ifdef DISTANCE_CHECK	
+	Point A(2, 3);
+	Point B(7, 8);
+	cout << delimiter;
+	cout << "Расстояние между А и В: " << A.distance(B) << endl;
+	cout << delimiter;
+	cout << "Расстояние между B и A: " << B.distance(A) << endl;
+	cout << delimiter;
+	cout << "Расстояние между точками А и В: "<<distance(A, B) << endl;
+	cout << delimiter;
+	cout << "Расстояние между точками B и A: "<<distance(B, A) << endl;
+#endif //DISTANCE_CHECK
 #ifdef ASSIGMENT_CHECK
 	Point A, B, C;
+	cout << delimiter;
 	A = B = C = Point(4, 4);
+	cout << delimiter;
 #endif //ASSIGMENT_CHECK
 
-
+#ifdef OPERATORS_CHECK
 	Point A(2, 3);
 	A.print();
-	cout << A.distance() << endl;//use distance one Point
 
 	Point B(7, 8);
 	B.print();
-	cout << "Расстояние между точками А и В: "<<distance(A, B) << endl;//use distance two Points
+	
 	Point C = A + B;
 	C.print();
 
@@ -195,5 +216,9 @@ void main()
 	A.set_y(44);*/
 	A(33, 44);
 	A.print();
+#endif //OPERATORS_CHECK
+
+
+
 }
 
