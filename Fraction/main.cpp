@@ -1,6 +1,10 @@
 ﻿#include<iostream>
 using namespace std;
 
+class Fraction;
+Fraction operator*(Fraction left, Fraction right);
+Fraction operator/(const Fraction& left, const Fraction& right);
+
 class Fraction
 {
 	int integer;		//Целая часть
@@ -73,18 +77,59 @@ public:
 	{
 		cout << "Destructor:/t" << this << endl;
 	}
+	// Increment/Decrement
+	Fraction& operator++()
+	{
+		integer++;
+		return *this;
+	}
+
+	Fraction& operator++(int)//postfix increment
+	{
+		Fraction old = *this;
+		integer++;
+		return old;
+	}
 
 	//		Methods:
-	void to_improper()
+	Fraction& to_improper()
 	{
 		numerator += integer * denominator;
 		integer = 0;
+		return *this;
 	}
 
-	void to_proper()
+	Fraction& to_proper()
 	{
 		integer += numerator / denominator;
 		numerator %= denominator;
+		return *this;
+	}
+
+	Fraction inverted()const
+	{
+		Fraction inverted = *this;
+		inverted.to_improper();
+		swap(inverted.numerator, inverted.denominator);
+		return inverted;
+	}
+
+	Fraction& reduce()
+	{
+		if (numerator == 0)return *this;
+		int more, less, rest;
+		if (numerator > denominator)more = numerator, less = denominator;
+		else less = numerator, more = denominator;
+		do
+		{
+			rest = more % less;
+			more = less;
+			less = rest;
+		} while (rest);
+		int GCD = more;
+		numerator /= GCD;
+		denominator /= GCD;
+		return *this;
 	}
 
 	void print()const
@@ -108,22 +153,17 @@ public:
 		cout << "CopyAssigment:/t" << this << endl;
 		return *this;
 	}
-	Fraction operator*=(Fraction obj)
+
+	Fraction& operator*=(const Fraction& obj)
 	{
-		this->to_improper();
-		obj.to_improper();
-		this->numerator*= obj.get_numerator();
-		this->denominator*= obj.get_denominator();
-		return *this;
+		return *this = *this*obj;
 	}
-	Fraction operator/=(Fraction obj)
+
+	Fraction& operator/=(const Fraction& obj)
 	{
-		this->to_improper();
-		obj.to_improper();
-		this->numerator*= obj.get_denominator();
-		this->denominator*= obj.get_numerator();
-		return *this;
+		return *this = *this / obj;
 	}
+
 	Fraction operator+=(const Fraction& obj)
 	{
 		this->integer+= obj.get_integer();
@@ -165,20 +205,28 @@ Fraction operator*(Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
-	Fraction result;
+	/*Fraction result;
 	result.set_numerator(left.get_numerator() * right.get_numerator());
 	result.set_denominator(left.get_denominator() * right.get_denominator());
-	return result;
+	result.to_proper();
+	return result;*/
+	/*
+	Fraction result(left.get_numerator() * right.get_numerator(), left.get_denominator() * right.get_denominator());
+	result.to_proper();
+	*/
+	return Fraction
+	(
+		left.get_numerator() * right.get_numerator(), 
+		left.get_denominator() * right.get_denominator()
+	).to_proper().reduce();
+	//Явно вызывается конструктор и создается временный безымянный объект
+	//Этот объект сразу же возвращается на место вызова функции
+	//Временные безымянные существуют в пределах одного выражения.
 }
 
-Fraction operator/(Fraction left, Fraction right)
+Fraction operator/(const Fraction& left, const Fraction& right)
 {
-	left.to_improper();
-	right.to_improper();
-	Fraction result;
-	result.set_numerator(left.get_numerator() * right.get_denominator());
-	result.set_denominator(left.get_denominator() * right.get_numerator());
-	return result;
+	return left*right.inverted();
 }
 
 Fraction operator+(Fraction left, Fraction right)
@@ -219,8 +267,58 @@ Fraction operator-(Fraction left, Fraction right)
 	return result;
 }
 
+bool operator==(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return (left.get_numerator() * right.get_denominator() == right.get_numerator() * left.get_denominator());
+}
+
+bool operator!=(const Fraction left, Fraction right)
+{
+	return !(left == right);
+}
+
+bool operator>(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return (left.get_numerator() * right.get_denominator() > right.get_numerator() * left.get_denominator());
+}
+
+bool operator<(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return (left.get_numerator() * right.get_denominator() < right.get_numerator() * left.get_denominator());
+}
+
+bool operator>=(const Fraction left, Fraction right)
+{
+	return !(left < right);
+}
+
+bool operator<=(const Fraction left, Fraction right)
+{
+	return !(left > right);
+}
+
+std::ostream& operator<<(std::ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer())os << obj.get_integer();
+	if (obj.get_numerator())
+	{
+		if (obj.get_integer())os<< "(";
+		cout << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())os << ")";
+	}
+	else if (obj.get_integer() == 0)os << 0;
+	return os;
+}
 
 //#define CONSTRUCTORS_CHEK
+//#define ARIFMETICAL_OPERATORS_CHEK
+//#define INCREMENT_CHEK
 
 void main()
 {
@@ -237,19 +335,28 @@ void main()
 
 	Fraction D(2, 3, 4);
 	D.print();
-#endif
-
-	Fraction A(7, 5, 12);
+#endif //CONSTRUCTORS_CHEK
+#ifdef ARIFMETICAL_OPERATORS_CHEK
+	Fraction A(2, 3, 4);
 	A.print();
-	Fraction B(3, 2, 3);
+	Fraction B(3, 4, 5);
 	B.print();
 	Fraction C = A * B;
 	C.print();
-	C = A + B;
-	C.print();
-	C = A - B;
-	C.print();
-	A -= B;
+	A *= B;
 	A.print();
+	A /= B;
+	A.print();
+#endif //ARIFMETICAL_OPERATORS_CHEK
+#ifdef INCREMENT_CHEK
+	for (Fraction i(1, 4); i.get_integer() < 10; ++i)//лучше использовать префикс инкремент при работе с объектами
+	{
+		i.print();
+	}
+#endif //INCREMENT_CHEK
 
+	//cout << (Fraction(1, 2) > Fraction(5, 10)) << endl;
+
+	Fraction A(2, 3, 4);
+	cout << A << endl;
 }
