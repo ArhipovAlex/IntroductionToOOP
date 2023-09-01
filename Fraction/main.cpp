@@ -91,6 +91,18 @@ public:
 		return old;
 	}
 
+	Fraction& operator--()
+	{
+		integer--;
+		return *this;
+	}
+
+	Fraction& operator--(int)//postfix decrement
+	{
+		Fraction old = *this;
+		integer--;
+		return old;
+	}
 	//		Methods:
 	Fraction& to_improper()
 	{
@@ -316,6 +328,19 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 	return os;
 }
 
+std::istream& operator>>(std::istream& is, Fraction& obj)
+{
+	int integer, numerator, denominator;
+	is >> integer >> numerator >> denominator;
+	if (is) 
+	{
+		obj.set_integer(integer);
+		obj.set_numerator(numerator);
+		obj.set_denominator(denominator);
+	}
+	return is;
+}
+
 //#define CONSTRUCTORS_CHEK
 //#define ARIFMETICAL_OPERATORS_CHEK
 //#define INCREMENT_CHEK
@@ -358,5 +383,7 @@ void main()
 	//cout << (Fraction(1, 2) > Fraction(5, 10)) << endl;
 
 	Fraction A(2, 3, 4);
+	cout << A << endl;
+	cout << "Введите дробь:\t"; cin >> A;
 	cout << A << endl;
 }
