@@ -4,6 +4,8 @@ using namespace std;
 class Fraction;
 Fraction operator*(Fraction left, Fraction right);
 Fraction operator/(const Fraction& left, const Fraction& right);
+Fraction operator+(Fraction left, Fraction right);
+Fraction operator-(Fraction left, Fraction right);
 
 class Fraction
 {
@@ -178,6 +180,7 @@ public:
 
 	Fraction operator+=(const Fraction& obj)
 	{
+		/*
 		this->integer+= obj.get_integer();
 		int min_denom = this->denominator < obj.get_denominator() ? this->denominator : obj.get_denominator();
 		int max_denom = this->denominator > obj.get_denominator() ? this->denominator : obj.get_denominator();
@@ -186,11 +189,12 @@ public:
 			++i;
 		while (min_denom * i % max_denom != 0);
 		this->numerator= this->numerator * ((min_denom * i) / this->denominator) + obj.get_numerator() * ((min_denom * i) / obj.get_denominator());
-		this->denominator=min_denom * i;
-		return *this;
+		this->denominator=min_denom * i;*/
+
+		return *this=*this+obj;
 	}
 	Fraction operator-=(const Fraction& obj)
-	{
+	{/*
 		Fraction result;
 		this->integer-= obj.get_integer();
 		int min_denom = this->denominator < obj.get_denominator() ? this->denominator : obj.get_denominator();
@@ -208,8 +212,9 @@ public:
 			this->integer--;
 			this->numerator=(min_denom * i) + (this->numerator * (min_denom * i) / this->denominator) - obj.get_numerator() * ((min_denom * i) / obj.get_denominator());
 		}
-		this->denominator=min_denom * i;
-		return *this;
+		this->denominator=min_denom * i;*/
+
+		return *this=*this-obj;
 	}
 };
 
@@ -366,11 +371,11 @@ void main()
 	A.print();
 	Fraction B(3, 4, 5);
 	B.print();
-	Fraction C = A * B;
+	Fraction C = A + B;
 	C.print();
-	A *= B;
+	A += B;
 	A.print();
-	A /= B;
+	A -= B;
 	A.print();
 #endif //ARIFMETICAL_OPERATORS_CHEK
 #ifdef INCREMENT_CHEK
