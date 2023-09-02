@@ -106,6 +106,15 @@ public:
 		integer--;
 		return old;
 	}
+	//Type-cast operators
+	explicit operator int()
+	{
+		return to_proper().integer;
+	}
+	explicit operator double()
+	{
+		return integer + (double)numerator / denominator;
+	}
 	//		Methods:
 	Fraction& to_improper()
 	{
@@ -113,14 +122,12 @@ public:
 		integer = 0;
 		return *this;
 	}
-
 	Fraction& to_proper()
 	{
 		integer += numerator / denominator;
 		numerator %= denominator;
 		return *this;
 	}
-
 	Fraction inverted()const
 	{
 		Fraction inverted = *this;
@@ -128,7 +135,6 @@ public:
 		swap(inverted.numerator, inverted.denominator);
 		return inverted;
 	}
-
 	Fraction& reduce()
 	{
 		if (numerator == 0)return *this;
@@ -146,7 +152,6 @@ public:
 		denominator /= GCD;
 		return *this;
 	}
-
 	void print()const
 	{
 		if (integer)cout << integer;
@@ -168,17 +173,14 @@ public:
 		cout << "CopyAssigment:/t" << this << endl;
 		return *this;
 	}
-
 	Fraction& operator*=(const Fraction& obj)
 	{
 		return *this = *this*obj;
 	}
-
 	Fraction& operator/=(const Fraction& obj)
 	{
 		return *this = *this / obj;
 	}
-
 	Fraction operator+=(const Fraction& obj)
 	{
 		/*
@@ -241,12 +243,10 @@ Fraction operator*(Fraction left, Fraction right)
 	//Этот объект сразу же возвращается на место вызова функции
 	//Временные безымянные существуют в пределах одного выражения.
 }
-
 Fraction operator/(const Fraction& left, const Fraction& right)
 {
 	return left*right.inverted();
 }
-
 Fraction operator+(Fraction left, Fraction right)
 {
 	Fraction result;
@@ -261,7 +261,6 @@ Fraction operator+(Fraction left, Fraction right)
 	result.set_denominator(min_denom * i);
 	return result;
 }
-
 Fraction operator-(Fraction left, Fraction right)
 {
 	Fraction result;
@@ -291,31 +290,26 @@ bool operator==(Fraction left, Fraction right)
 	right.to_improper();
 	return (left.get_numerator() * right.get_denominator() == right.get_numerator() * left.get_denominator());
 }
-
 bool operator!=(const Fraction left, Fraction right)
 {
 	return !(left == right);
 }
-
 bool operator>(Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
 	return (left.get_numerator() * right.get_denominator() > right.get_numerator() * left.get_denominator());
 }
-
 bool operator<(Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
 	return (left.get_numerator() * right.get_denominator() < right.get_numerator() * left.get_denominator());
 }
-
 bool operator>=(const Fraction left, Fraction right)
 {
 	return !(left < right);
 }
-
 bool operator<=(const Fraction left, Fraction right)
 {
 	return !(left > right);
@@ -333,7 +327,6 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 	else if (obj.get_integer() == 0)os << 0;
 	return os;
 }
-
 std::istream& operator>>(std::istream& is, Fraction& obj)
 {
 	/*
@@ -374,7 +367,11 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 //#define CONSTRUCTORS_CHEK
 //#define ARIFMETICAL_OPERATORS_CHEK
 //#define INCREMENT_CHEK
+// 
 //#define TYPE_CONVERSIONS_BASIC
+//#define CONVERSIONS_FROM_OTHER_TO_CLASS
+//#define CONVERSIONS_FROM_CLASS_TO_OTHER
+#define CONVERSIONS_HOME_WORK
 
 void main()
 {
@@ -420,11 +417,26 @@ void main()
 #ifdef TYPE_CONVERSIONS_BASIC
 
 #endif //TYPE_CONVERSIONS_BASIC
-
+#ifdef CONVERSIONS_FROM_OTHER_TO_CLASS
 	Fraction A = (Fraction)5; // Conversion INT to Fraction from 1ArgConstructor
 	cout << A << endl;
 
 	Fraction B;
 	B = Fraction(8);
 	cout << B << endl;
+#endif //CONVERSIONS_FROM_OTHER_TO_CLASS
+#ifdef CONVERSIONS_FROM_CLASS_TO_OTHER
+	Fraction A(52, 10);
+	cout << A << endl;
+	int a = (int)A;
+	cout << a << endl;
+
+	Fraction B(2, 3, 4);
+	cout << B << endl;
+	double b = (double)B;
+	cout << b << endl;
+#endif//CONVERSIONS_FROM_CLASS_TO_OTHER
+#ifdef CONVERSIONS_HOME_WORK
+
+#endif
 }
