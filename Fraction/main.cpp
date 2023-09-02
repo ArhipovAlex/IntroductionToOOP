@@ -48,7 +48,7 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
@@ -374,6 +374,7 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 //#define CONSTRUCTORS_CHEK
 //#define ARIFMETICAL_OPERATORS_CHEK
 //#define INCREMENT_CHEK
+//#define TYPE_CONVERSIONS_BASIC
 
 void main()
 {
@@ -411,8 +412,19 @@ void main()
 #endif //INCREMENT_CHEK
 
 	//cout << (Fraction(1, 2) > Fraction(5, 10)) << endl;
-
+	/*
 	Fraction A;
 	cout << "Введите дробь:\t"; cin >> A;
 	cout << A << endl;
+	*/
+#ifdef TYPE_CONVERSIONS_BASIC
+
+#endif //TYPE_CONVERSIONS_BASIC
+
+	Fraction A = (Fraction)5; // Conversion INT to Fraction from 1ArgConstructor
+	cout << A << endl;
+
+	Fraction B;
+	B = Fraction(8);
+	cout << B << endl;
 }
