@@ -1,4 +1,5 @@
-﻿#include<iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
 using namespace std;
 
 class Fraction;
@@ -335,6 +336,7 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 
 std::istream& operator>>(std::istream& is, Fraction& obj)
 {
+	/*
 	int integer, numerator, denominator;
 	is >> integer >> numerator >> denominator;
 	if (is) 
@@ -342,6 +344,29 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 		obj.set_integer(integer);
 		obj.set_numerator(numerator);
 		obj.set_denominator(denominator);
+	}*/
+	/*
+	-------------
+	5
+	1/2
+	5(1/2)
+	-------------
+	*/
+	const int SIZE = 256;
+	char sz_buffer[SIZE]{};
+	is >> sz_buffer;
+	int number[3] = {};
+	char delimiters[] = "()/";
+	int n = 0;
+	for (char* pch = strtok(sz_buffer, delimiters); pch; pch = strtok(NULL, delimiters))
+	{
+		number[n++] = std::atoi(pch);//atoi - ASCII-string to integer - преобразует строку в число
+	}
+	switch (n)
+	{
+	case 1: obj = Fraction(number[0]); break;
+	case 2: obj = Fraction(number[0], number[1]); break;
+	case 3: obj = Fraction(number[0], number[1], number[2]); break;
 	}
 	return is;
 }
@@ -387,8 +412,7 @@ void main()
 
 	//cout << (Fraction(1, 2) > Fraction(5, 10)) << endl;
 
-	Fraction A(2, 3, 4);
-	cout << A << endl;
+	Fraction A;
 	cout << "Введите дробь:\t"; cin >> A;
 	cout << A << endl;
 }
