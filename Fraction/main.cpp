@@ -1,6 +1,5 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
-#include<string>
 using namespace std;
 
 class Fraction;
@@ -56,6 +55,16 @@ public:
 		this->denominator = 1;
 		cout << "1ArgConstructor:\t" << this << endl;
 	}
+	Fraction(double decimal)
+	{
+		decimal += 1e-10;
+		integer = decimal;
+		decimal -= integer;
+		denominator = 1e+9;
+		numerator = decimal * denominator;
+		reduce();
+		cout<< "doubleConstructor:\t" << this << endl;
+	}
 	Fraction(int numerator,int denominator)
 	{
 		this->integer = 0;
@@ -87,20 +96,17 @@ public:
 		integer++;
 		return *this;
 	}
-
 	Fraction& operator++(int)//postfix increment
 	{
 		Fraction old = *this;
 		integer++;
 		return old;
 	}
-
 	Fraction& operator--()
 	{
 		integer--;
 		return *this;
 	}
-
 	Fraction& operator--(int)//postfix decrement
 	{
 		Fraction old = *this;
@@ -174,13 +180,6 @@ public:
 		cout << "CopyAssigment:/t" << this << endl;
 		return *this;
 	}
-	Fraction& operator=(const double& number)
-	{
-		this->integer = (int)number;
-		string s = to_string(number);
-		cout << s << endl;
-	}
-
 	Fraction& operator*=(const Fraction& obj)
 	{
 		return *this = *this*obj;
@@ -444,7 +443,7 @@ void main()
 	cout << b << endl;
 #endif//CONVERSIONS_FROM_CLASS_TO_OTHER
 #ifdef CONVERSIONS_HOME_WORK
-	Fraction A = (Fraction)2.75;
+	Fraction A = 2.75;
 	cout << A << endl;
 #endif
 }
