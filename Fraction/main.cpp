@@ -1,5 +1,6 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
+#include<string>
 using namespace std;
 
 class Fraction;
@@ -173,6 +174,13 @@ public:
 		cout << "CopyAssigment:/t" << this << endl;
 		return *this;
 	}
+	Fraction& operator=(const double& number)
+	{
+		this->integer = (int)number;
+		string s = to_string(number);
+		cout << s << endl;
+	}
+
 	Fraction& operator*=(const Fraction& obj)
 	{
 		return *this = *this*obj;
@@ -367,7 +375,6 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 //#define CONSTRUCTORS_CHEK
 //#define ARIFMETICAL_OPERATORS_CHEK
 //#define INCREMENT_CHEK
-// 
 //#define TYPE_CONVERSIONS_BASIC
 //#define CONVERSIONS_FROM_OTHER_TO_CLASS
 //#define CONVERSIONS_FROM_CLASS_TO_OTHER
@@ -437,6 +444,7 @@ void main()
 	cout << b << endl;
 #endif//CONVERSIONS_FROM_CLASS_TO_OTHER
 #ifdef CONVERSIONS_HOME_WORK
-
+	Fraction A = (Fraction)2.75;
+	cout << A << endl;
 #endif
 }

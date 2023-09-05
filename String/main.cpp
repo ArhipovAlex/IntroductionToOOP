@@ -60,9 +60,15 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 	return os << obj.get_str();
 }
 
+
+
+
+//#define CONSTRUCTOR_CHECK
+#define OPERATOR_PLUS_CHECK
 void main()
 {
 	setlocale(LC_ALL, "");
+#ifdef CONSTRUCTOR_CHECK
 	String str(5);
 	str.print();
 
@@ -76,4 +82,11 @@ void main()
 	String str3;
 	str3 = str2; //copy assigment
 	cout << str3 << endl;
+#endif //CONSTRUCTOR_CHEK
+#ifdef OPERATOR_PLUS_CHECK
+	String str1 = "Hello";
+	String str2 = "World";
+	String str3 = str1+str2;
+	cout << str3 << endl;
+#endif //OPERATOR_PLUS_CHECK
 }
