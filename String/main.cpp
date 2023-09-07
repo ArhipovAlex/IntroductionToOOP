@@ -80,7 +80,7 @@ public:
 		other.str = nullptr;
 		cout << "MoveAssignment:\t" << this << endl;
 	}
-	String operator+=(const String& obj)
+	String& operator+=(const String& obj)
 	{
 		return *this = *this + obj;
 	}
