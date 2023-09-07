@@ -8,7 +8,7 @@ class String;
 String operator+(const String& left, const String& right);
 
 class String
-{
+{	
 	int size;		//размер строки в Ѕайтах
 	char* str;	//адрес строки в динамической пам€ти
 public:
@@ -25,17 +25,17 @@ public:
 		return str;
 	}
 	//		Constructors:
-	explicit String(int size = 80)
+	explicit String(int size = 80) :size(size), str(new char[size] {})
 	{
-		this->size = size;
-		this->str = new char[size] {};
+		//this->size = size;
+		//this->str = new char[size] {};
 		cout << "DefaultConstruct:\t" << this << endl;
 	}
-	String(String&& other)
+	String(String&& other):size(other.size),str(other.str)
 	{
 		//shallow copy
-		this->size = other.size;
-		this->str = other.str;
+		//this->size = other.size;
+		//this->str = other.str;
 		other.size = 0;
 		other.str = nullptr;
 		cout << "MoveConstructor:" << this << endl;
@@ -45,18 +45,18 @@ public:
 		delete[] str;
 		cout << "Destructor:\t" << this << endl;
 	}
-	String(const char* str)
+	String(const char* str):size(strlen(str)+1), str(new char[size] {})
 	{
-		this->size = strlen(str)+1;
-		this->str = new char[size] {};
+		//this->size = strlen(str)+1;
+		//this->str = new char[size] {};
 		for (int i = 0; str[i]; i++)this->str[i] = str[i];
-		cout << "Construct:\t" << this << endl;
+		cout << "Single-Argument Char constructor:\t" << this << endl;
 	}
-	String(const String& other)
+	String(const String& other):size(other.size), str(new char[size] {})
 	{
 		//deep copy
-		this->size = other.size;
-		this->str = new char[size] {};
+		//this->size = other.size;
+		//this->str = new char[size] {};
 		for (int i=0; i<size; i++)this->str[i] = other.str[i];
 		cout << "CopyConstruct:\t" << this << endl;
 	}
@@ -115,7 +115,7 @@ String operator+(const String& left, const String& right)
 }
 
 //#define CONSTRUCTOR_CHECK
-#define OPERATOR_PLUS_CHECK
+//#define OPERATOR_PLUS_CHECK
 
 void main()
 {
@@ -148,4 +148,33 @@ void main()
 	str1 += str2;
 	cout << str1 << endl;
 #endif //OPERATOR_PLUS_CHECK
+
+	String str1;	//Default constructor
+	str1.print();
+
+	String str2(5);	//Single-Arg constructor
+	str2.print();
+
+	String str3 = "Hello"; //Single-Argument Char constructor
+	str3.print();
+
+	String str4();	//«десь не создаетс€ никакой объект,
+					//объ€вл€етс€ функци€ str4, котора€ ничего не принимает 
+					//и возвращает объект класса String
+	//str4.print();
+	String str5{}; //явно вызываетс€ конструктор по умолчанию
+	str5.print();
+
+	String str6("World");
+	str6.print();
+
+	String str7{ "Compile" };
+	str7.print();
+
+	String str8 = str3;//Copy constructor
+	str8.print();
+
+	String str9;
+	str9 = str6;
+	str9.print();
 }
