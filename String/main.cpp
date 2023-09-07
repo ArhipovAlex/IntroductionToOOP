@@ -4,6 +4,9 @@ using namespace std;
 
 #define delimiter "\n-----------------------------\n"
 
+class String;
+String operator+(const String& left, const String& right);
+
 class String
 {
 	int size;		//размер строки в Байтах
@@ -77,6 +80,10 @@ public:
 		other.str = nullptr;
 		cout << "MoveAssignment:\t" << this << endl;
 	}
+	String operator+=(const String& obj)
+	{
+		return *this = *this + obj;
+	}
 	char operator[](int i)const
 	{
 		return str[i];
@@ -137,5 +144,8 @@ void main()
 	str3 = str1 + str2;
 	cout << delimiter << endl;
 	cout << str3 << endl;
+	cout << delimiter << endl;
+	str1 += str2;
+	cout << str1 << endl;
 #endif //OPERATOR_PLUS_CHECK
 }
